@@ -6,6 +6,7 @@ import datetime
 import json
 import os
 import time
+import random
 
 import csv
 
@@ -26,6 +27,11 @@ import db
 
 app = Flask(__name__)
 rabais = "off"
+taxe = "off"
+
+# accéder liste de citations inspirantes
+fichier_citations = open("static/citations_inspirantes.csv", 'r', encoding="utf-8")
+liste_de_citations_brutes = list(fichier_citations.readlines())
 
 # numéro de pièce des abonnements et durées
 abonnements = {
@@ -776,14 +782,28 @@ def CalculerPrixTotalFacture(facture):
 # def add_tax(total):
 #   return total*1.15
 
-# Calcule le prix total d'une entrée d'une pièce dans une facture.
-def CalculerPrixTotalEntreePiece(entree_piece, rabais_v2="off"):
+def CalculerPrixTotalEntreePiece(entree_piece, rabais_v2="non applicable"):
+  """Calcule le prix total d'une entrée d'une pièce dans une facture."""
   global rabais
-  print("CalculerPrixTotalEntreePiece", rabais)
-  if rabais=="off":
+  global taxe
+
+  print("CalculerPrixTotalEntreePiece: rabais: "+str(rabais) +" taxe: "+str(taxe))
+
+  if rabais=="off" and taxe == "off":
+    return float(entree_piece['quantite'] * entree_piece['prix'])*1.00
+
+  if rabais=="off" and taxe == "on":
     return float(entree_piece['quantite'] * entree_piece['prix'])*1.15
+
+  if rabais=="on" and taxe == "off":
+    return float(entree_piece['quantite'] * entree_piece['prix'])*0.85
+
+  if rabais=="on" and taxe == "on":
+    return float(entree_piece['quantite'] * entree_piece['prix'])*0.9775
+
   else:
-  	return float(entree_piece['quantite'] * entree_piece['prix'])*0.9775
+  	raise ValueError("Les variables globales rabais et taxes n'ont pas la valeur \"off\" ou \"on\"", end='\n')
+
 
 @app.route('/api/factures/<int:numero_facture>/pieces', methods=['POST'])
 def PostPieceInFacture(numero_facture):
@@ -962,7 +982,12 @@ def MettreAJourExpirationMembre(numero):
 #appellé lorsqu'on va à la racine de la page web. C'est-à-dire http://0.0.0.0:8888/
 @app.route('/', methods=['GET'])
 def Index():
-  return render_template('index.html')
+  citation, auteur = random.choice(liste_de_citations_brutes).replace('\n', '').split('|')
+
+  string_citation = """<div class="otro-blockquote">"""+str(citation)+"""<span>"""+str(auteur)+"""</span>
+</div>"""
+
+  return render_template('index.html', message=string_citation)
 
 #appelé lorsqu'on va sur la page "Liste des membres"
 @app.route('/membres/', methods=['GET'])
@@ -986,19 +1011,47 @@ def UnePiece(numero):
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
+  """Fonction pour voir si l'utilisateur veut ajouter des taxes ou des rabais"""
+
   global rabais
-  option = request.form["rabais"]
-  print(option)
-  rabais = option
-  return render_template("factures.html")
+  global taxe 
+
+  print("Choix de l'utilisateur:")
+  print(request.form, end='\n')
+
+  # voir si le checkbox rabais est selectionne
+  if "rabais" in request.form:
+    if request.form["rabais"] == "on":
+      rabais = "on"
+    else:
+      rabais = "off"
+  if "rabais" not in request.form:
+    rabais = "off"
+
+  # voir si le checkbox taxe est selectionne
+  if "taxe" in request.form:
+    if request.form["taxe"] == "on":
+      taxe = "on"
+    else:
+      taxe = "off"
+  if "taxe" not in request.form:
+    taxe = "off"
+
+  print("taxe:   "+str(taxe))
+  print("rabais: "+str(rabais))
+
+  return render_template("factures.html", rabais=traduire_rabais(rabais), taxe=traduire_taxe(taxe))
 
 
 
 #appelé lorsqu'on va sur la page "Factures"
 @app.route('/factures', methods=['GET'])
 def Factures():
+  global rabais
+  global taxe
+
   print("Factures")
-  return render_template('factures.html')
+  return render_template('factures.html', rabais=traduire_rabais(rabais) ,taxe=traduire_taxe(taxe))
 
 @app.route('/factures-fermees', methods=['GET'])
 def FacturesFermees():
@@ -1064,14 +1117,44 @@ def formulaire():
 
 @app.route("/sauvegarder_formulaire", methods=["GET", "POST"])
 def sauvegarder_formulaire():
+  """Fonction pour sauvegarder le formlaire en format CSV"""
   result = request.form
   print(result)
+  write_string = ''
+
+  print(request.form.getlist("lien"))
+  print(request.form.getlist("activite"))
+
+  checkbox_names = ["lien", "activite"]
 
   with open('data/responses.csv', 'a') as f:  # Just use 'w' mode in 3.x
-    w = csv.DictWriter(f, result.keys())
-    w.writerow(result)
+    for item in enumerate(result):
+      print(item)
+      if item[0] == 0:
+        if item[1] in checkbox_names:
+          write_string = '-'.join(request.form.getlist(item[1]))
+        else:
+          write_string = request.form[item[1]]
 
-  return render_template("index.html")
+      else:
+        if item[1] in checkbox_names:
+          write_string = write_string + ',' + '-'.join(request.form.getlist(item[1]))
+        else:
+          write_string = write_string + ',' + request.form[item[1]]
+
+    write_string = write_string + '\n'
+    f.write(str(write_string))
+
+  message = """  <div id="message_membre_enregistre" class="w3-modal w3-animate-opacity" style="display:block">
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('message_membre_enregistre').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <p style="padding-top:40px; padding-bottom-30px;">"""+str(request.form["prenom"])+' '+str(request.form["nom"])+ """ a été enregistré(e).</p>
+      </div>
+    </div>
+  </div>"""
+
+  return render_template("index.html", message=message)
 
 
 # TODO: replace by http://docs.mongodb.org/manual/tutorial/create-an-auto-incrementing-field/
@@ -1093,6 +1176,27 @@ def ObtenirProchainNumeroDeFacture():
   else:
     return d.factures.find().sort('numero', pymongo.DESCENDING).limit(1)[0]['numero'] + 1
 
+
+def traduire_rabais(rabais):
+  """Cette fonction traduit la valeur de la variable rabais pour le montrer dans le template factures.html"""
+  # print(f"Parametre rabais: {rabais}")
+
+  if rabais == "on":
+    return "appliqués"
+  elif rabais == "off":
+    return "non appliqués"
+  else:
+    raise ValueError("le paramètre rabais peut seulement être de valeur \"on\" ou \"off\"")
+
+def traduire_taxe(taxe):
+  # print(f"Parametre taxe: {taxe}")
+  
+  if taxe == "on":
+    return "appliquées"
+  elif taxe == "off":
+    return "non appliquées"
+  else:
+    raise ValueError("le paramètre taxe peut seulement être de valeur \"on\" ou \"off\"")
 
 if __name__ == '__main__':
   if 'BICIKLO_DEBUG' in os.environ:
