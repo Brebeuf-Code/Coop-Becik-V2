@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<script src="/static/js/membre.js"></script>
+{% endblock %}
+
+{% block content %}
+  <h1>Membre :  {{ membre.prenom }} {{ membre.nom  }}</h1>
+  <p>
+    <a class="btn btn-primary" href="/membres" id="retourliste">&#8592; Retour à la liste</a>
+    <button type="button" class="btn" id="modifier">Modifier</button>
+    <button type="button" class="btn btn-success" id="sauvegarder" style="display: none;">Sauvegarder</button>
+    <button type="button" class="btn btn-danger" id="annuler" style="display: none;">Annuler</button>
+  </p>
+  <p>
+  <strong>m</strong> - modifier, <strong>entrée</strong> - sauvegarder, <strong>échap.</strong> - annuler
+  </p>
+  <p>
+    <table class="table table-striped" id="detailsmembre" style="width: auto;">
+      <tbody>
+        <tr>
+         <td class="cle">Numéro</td>
+         <td class="valeur" id="numero">
+           {{ membre.numero }}
+         </td>
+        </tr>
+        <tr>
+          <td class="cle">Prénom</td>
+          <td class="valeur" id="prenom" data-edit="text">
+            <span>{{ membre.prenom }}</span>
+            <input type="text" style="display: none;" />
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Nom</td>
+          <td class="valeur" id="nom" data-edit="text">
+            <span>{{ membre.nom }}</span>
+            <input type="text" style="display: none;" />
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Courriel</td>
+          <td class="valeur" id="courriel" data-edit="text">
+            <span>{{ membre.courriel }}</span>
+            <input type="text" style="display: none;" />
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Liste d'envoi</td>
+          <td class="valeur" id="listedenvoi" data-edit="radio">
+            <span>{{ membre.listedenvoi }}</span>
+            <label style="display: none;" class="radio inline"><input type="radio" class="radio" name="listedenvoi" value="oui" id="listedenvoi-oui" />oui</label>
+            <label style="display: none;" class="radio inline"><input type="radio" class="radio inline" name="listedenvoi" value="non" id="listedenvoi-non" />non</label>
+            <label style="display: none;" class="radio inline"><input type="radio" class="radio inline" name="listedenvoi" value="fait" id="listedenvoi-fait" />fait</label>
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Provenance</td>
+          <td class="valeur" id="provenance" data-edit="text">
+            <span>{{ membre.provenance }}</span>
+            <input type="text" style="display: none;" />
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Est bénévole</td>
+          <td class="valeur" id="estbenevole" data-edit="radio">
+            {% if membre.estbenevole %}
+              <span>oui</span>
+            {% else %}
+              <span>non</span>
+            {% endif %}
+
+            <label style="display: none;" class="radio inline"><input type="radio" class="radio" name="estbenevole" value="oui" id="estbenevole-oui" />oui</label>
+            <label style="display: none;" class="radio inline"><input type="radio" class="radio inline" name="estbenevole" value="non" id="estbenevole-non" />non</label>
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Expiration</td>
+          <td class="valeur" id="expiration">
+            <span>
+              {% if 'expiration' in membre %}
+                {{ membre.expiration.strftime("%Y-%m-%d") }}
+              {% else %}
+                ?
+              {% endif %}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="cle">Notes</td>
+          <td class="valeur" id="notes" data-edit="text">
+            <span>{{ membre.notes }}</span>
+            <input type="text" style="display: none;" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

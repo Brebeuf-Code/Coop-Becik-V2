@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<script src="/static/js/piece.js"></script>
+{% endblock %}
+
+{% block content %}
+  <h1>Pièce {{piece.numero}}</h1>
+  <p>
+    <a class="btn btn-primary" href="/pieces" id="retourliste">&#8592; Retour à la liste</a>
+    <button type="button" class="btn btn-success" id="sauvegarder">Sauvegarder</button>
+  </p>
+  <p>
+    <table class="table table-striped" id="detailspiece" style="width: auto;">
+      <tbody>
+        <tr>
+         <td class="cle">Numéro</td>
+         <td class="valeur" id="numero">
+           {{ piece.numero }}
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Section</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="section" value="{{ piece.section }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Nom</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="nom" value="{{ piece.nom }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Référence</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="reference" value="{{ piece.reference }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Caractéristique</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="caracteristique" value="{{ piece.caracteristique }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Quantité</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="quantite" value="{{ piece.quantite }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Prix</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="prix" value="{{ piece.prix }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Remarques</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="remarques" value="{{ piece.remarques }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle"># Babac</td>
+         <td class="valeur">
+           <input class="input-xxlarge" type="text" id="numerobabac" value="{{ piece.numerobabac }}">
+         </td>
+        </tr>
+        <tr>
+         <td class="cle">Active</td>
+         <td class="valeur">
+           <input type="checkbox" id="active" {% if piece.active %}checked="checked"{% endif %}>
+         </td>
+        </tr>
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

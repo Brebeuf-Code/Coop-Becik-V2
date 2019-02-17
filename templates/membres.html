@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<script src="/static/js/membres.js"></script>
+
+{% endblock %}
+{% block content %}
+  <h1>Liste des membres
+    <button type="button" data-toggle="modal" data-target="#ajoutmembre" class="btn btn-primary btn-mini">Nouveau membre</button>
+  </h1>
+
+  <div id="ajoutmembre" class="modal">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h3>Nouveau membre</h3>
+    </div>
+    <div class="modal-body" style="padding-bottom: 100px;">
+      <p>
+        <input type="text" id="ajoutprenom" placeholder="Prénom" />
+        <input type="text" id="ajoutnom" placeholder="Nom" />
+      </p>
+      <p>
+        <input type="text" id="ajoutcourriel" placeholder="Courriel" />
+        <input type="text" id="ajoutprovenance" placeholder="Provenance" autocomplete="off">
+      </p>
+      <p>
+        <input class="input-xlarge" type="text" id="ajoutnotes" placeholder="Remarques" autocomplete="off">
+      </p>
+      <p>
+        <label class="checkbox"><input id="ajoutlistedenvoi" type="checkbox">Ajouter à la liste d'envoi</label>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Annuler</a>
+      <a href="#" class="btn btn-primary" id="ajoutenvoyer">Sauvegarder</a>
+    </div>
+  </div>
+
+  <div id="loading" style="text-align: center">
+    <img src="/static/loading.gif" />
+  </div>
+
+  <div>
+    <table id="membres">
+      <thead>
+         <tr>
+           <th data-column="numero">#</th>
+           <th data-column="prenom">Prénom</th>
+           <th data-column="nom">Nom</th>
+           <th data-column="courriel">Courriel</th>
+           <th data-column="provenance">Provenance</th>
+           <th data-column="expiration" data-transform="FormatDate">Expiration</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

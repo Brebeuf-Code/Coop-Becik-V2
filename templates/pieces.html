@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<script src="/static/js/pieces.js"></script>
+{% endblock %}
+
+{% block content %}
+  <h1>Liste des pièces
+	    <button type="button" data-toggle="modal" data-target="#ajoutpiece" class="btn btn-primary btn-mini">Nouvelle pièce</button>
+  </h1>
+
+  <div id="ajoutpiece" class="modal">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h3>Nouvelle pièce</h3>
+    </div>
+    <div class="modal-body" style="padding-bottom: 100px;">
+      <p>
+        <input type="text" id="ajoutnumero" placeholder="Numéro" />
+      </p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Annuler</a>
+      <a href="#" class="btn btn-primary" id="ajoutenvoyer">Sauvegarder</a>
+    </div>
+  </div>
+
+  <div id="loading" style="text-align: center">
+    <img src="/static/loading.gif" />
+  </div>
+
+  <div id="ajout-a-facture" class="modal hide" tabindex='-1'>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Ajout de pièce</h3>
+    </div>
+    <div class="modal-body">
+      <div id="boutons-factures" class="btn-group well" data-toggle="buttons-radio">
+
+      </div>
+      <div id="controles">
+        <form class="form-inline" id="form-ajouter-a-facture">
+          <input class="input-mini" type="text" id="quantite" placeholder="quantité">
+          <input type="submit" class="btn btn-primary" value="Ok">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="filtres">
+    <form class="form-inline" onsubmit="return false;">
+      <span id="filtre-numero"></span>
+      <span id="filtre-section"></span>
+      <span id="filtre-nom"></span>
+      <span id="filtre-reference"></span>
+      <label class="checkbox">
+        <input type="checkbox" id="pieces-actives-seulement" checked="checked">
+        Pièces actives seulement
+      </label>
+      <button id="filtre-reset" class="btn">Reset !</button>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <table id="pieces" data-row-class-callback="ListePiecesRowClass">
+      <thead>
+         <tr>
+           <th data-column="numero">#</th>
+           <th data-column="section">Section</th>
+           <th data-column="nom">Nom</th>
+           <th data-column="reference">Référence</th>
+           <th data-column="caracteristique">Caractéristiques</th>
+           <th data-column="prix" data-transform="NombreVersPrix">Prix</th>
+           <th data-column="quantite">Quantité</th>
+           <th data-column="remarques">Remarques</th>
+           <th data-transform="ListePiecesColonneIconesData"></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
