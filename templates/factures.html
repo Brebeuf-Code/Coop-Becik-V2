@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<script src="/static/js/factures.js"></script>
+{% endblock %}
+
+{% block content %}
+  <h1>Factures ouvertes</h1>
+
+ 
+  <h4>1. Quelles factures?</h4>
+  <div><a href="/factures-fermees" class="btn btn-primary" id="btn-factures-fermees">Factures fermées &raquo;</a></div>
+
+  <h4>2. Quel membre?</h4>
+  <div>
+    <form class="form-inline" id="form-nouvelle-facture">
+    Nouvelle facture:
+    <div class="input-append">
+      <input type="text" class="input-mini" placeholder="membre" id="input-nouvelle-facture">
+      <button class="btn">Go</button>
+    </div>
+    </form>
+  </div>
+
+ <h4>3. Membre?</h4>
+ <form action="handle_data" method="POST">
+    <input type="radio" name="rabais" value="off">Non-membre</input><br>
+    <input type="radio" name="rabais" value="on">Membre</input><br>
+    <input type="submit" class="btn btn-primary" value="Submit">
+  </form>
+
+  <h4>4. Quels objets?</h4>
+  <div id="loading" style="text-align: center">
+    <img src="/static/loading.gif" />
+  </div>
+
+  <div id="factures-container">
+    <div class="facture-container" id="facture-template">
+      <span class="titre"></span>
+      <span class="boutons">
+        <i class="icon icon-folder-close close"></i>&nbsp;&nbsp;<i class="icon icon-trash remove"></i>
+      </span>
+
+
+      <div class="contenu">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Catégorie</th>
+              <th>Pièce</th>
+              <th>Référence</th>
+              <th>Quantité</th>
+              <th>Prix</th>
+              <th>Prix total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="100">
+                <form class="form-ajout-piece-facture">
+                <input class="input-mini input-numero-piece" type="text" placeholder="#">
+                <input class="input-mini input-quantite-piece" type="text" placeholder="quantité">
+                <input type="submit" class="btn" value="Ajouter">
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="text-align: right;" class="total"></div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

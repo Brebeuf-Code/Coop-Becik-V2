@@ -19,13 +19,12 @@ em {
   src: url(/static/font/OpenSans-Regular.ttf) format('truetype');
 }
 
-
 /* line 6, ../../sass/sass/base.scss */
 body {
   background: #eee;
   width: 100%;
   font-family: "Open Sans", sans-serif;
-  padding-top: 0px;
+  padding-top: 40px;
 }
 
 /* line 13, ../../sass/sass/base.scss */
@@ -254,13 +253,12 @@ table.dataTable tr.even td.sorting_3 {
 #content {
   overflow: hidden;
   padding: 0 20px;
-  padding-top: 40px;
 }
 /* line 6, ../../sass/sass/contents.scss */
 #content h1 {
   font-family: "Open Sans", sans-serif;
   font-weight: bold;
-  /*text-shadow: 0 0 10px #666;*/
+  text-shadow: 0 0 10px #666;
   font-variant: small-caps;
 }
 
@@ -277,9 +275,4 @@ table.dataTable tr.even td.sorting_3 {
 /* line 2, ../../sass/sass/admin.scss */
 table#rapport td, table#rapport th {
   padding: 4px;
-}
-
-.btn{
-    white-space:normal !important;
-    word-wrap: break-word; 
 }

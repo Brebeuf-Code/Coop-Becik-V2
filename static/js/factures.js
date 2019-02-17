@@ -290,27 +290,3 @@ $(document).ready(function () {
       $('#loading').hide();
     }).fail(DisplayError);
 });
-
-function montrer_et_cacher_details_de_la_transaction(){
-  /**
-    Fonction qui montre le div dont le id est details_de_la_transaction
-  */
-
-  var x = document.getElementById("details_de_la_transaction");
-
-  if(x.style.display === "none"){
-    x.style.display = "block";
-  }
-  else{
-    x.style.display = "none";
-  }
-
-}
-
-
-function montrer_et_cacher_modifier_prix(){
-
-  var x = document.getElementById("modifier_prix");
-  x.style.display = "block";
-  
-}
