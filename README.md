@@ -1,6 +1,10 @@
 biciklo
 =======
 
+**REPOSITORY INVALIDE**
+
+**RÉFÉREZ-VOUS AU REPOSITORY https://github.com/Brebeuf-Code/Coop-Becik-V3 POUR LE CODE LE PLUS RÉCENT**
+
 Système d'inventaire pour l'atelier **Biciklo**.
 
 dépendances
